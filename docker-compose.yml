@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+
+  jinja2:
+    image: jinja2
+    container_name: jinja2
+    build:
+      context: .
+      dockerfile: Dockerfile
+#      args:
+#        - ADDITIONAL_SOFTWARE=${ADDITIONAL_SOFTWARE}
+#        - OCSERV_VERSION=${OCSERV_VERSION}
+    volumes:
+      - ./data/templates:/opt/templates
+      - ./data/variables:/opt/variables
+    env_file:
+      - .env
+    extra_hosts:
+      host.docker.internal: host-gateway
+    restart: unless-stopped
+
+
+networks:
+  default:
+    driver: bridge
+#    ipam:
+#      config:
+#        - subnet: 10.201.0.0/24
+    driver_opts:
+      com.docker.network.enable_ipv6: "false"
+      com.docker.network.bridge.name: "docker_jinja2"
